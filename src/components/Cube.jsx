@@ -44,7 +44,7 @@ export const Cube = forwardRef(function Cube({ controlsRef }, ref) {
   };
 
   const doMove = useCallback(
-    (move, onDone) => {
+    (move, onDone, duration = 0.333) => {
       if (animating.current) return;
       const root = rootRef.current;
       if (!root) return;
@@ -65,7 +65,7 @@ export const Cube = forwardRef(function Cube({ controlsRef }, ref) {
 
       gsap.to(pivot.rotation, {
         [move.axis]: move.direction * (Math.PI / 2),
-        duration: 0.333,
+        duration,
         ease: 'power2.inOut',
         onComplete: () => {
           selected.forEach((mesh) => root.attach(mesh));

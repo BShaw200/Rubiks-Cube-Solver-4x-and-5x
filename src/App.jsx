@@ -16,6 +16,7 @@ export default function App() {
   const nextMove = useCubeStore((s) => s.nextMove);
   const finish = useCubeStore((s) => s.finish);
   const setDisplayedMove = useCubeStore((s) => s.setDisplayedMove);
+  const speed = useCubeStore((s) => s.speed);
 
   useEffect(() => {
     if (status !== 'SCRAMBLING' && status !== 'SOLVING') return;
@@ -30,8 +31,9 @@ export default function App() {
     }
 
     const move = sequence[currentMoveIndex];
+    const duration = 1 / speed;
     setDisplayedMove(moveToNotation(move, cubeSize));
-    cubeRef.current.doMove(move, () => nextMove());
+    cubeRef.current.doMove(move, () => nextMove(), duration);
   }, [status, currentMoveIndex]);
 
   return (

@@ -67,3 +67,28 @@ canvas {
   border: 1px solid #3a3a42;
   border-radius: 8px;
 }
+
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #f5f5f5;
+  font-size: 13px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid #3a3a42;
+  border-radius: 8px;
+  padding: 6px 12px;
+}
+
+.speed-control input[type='range'] {
+  width: 110px;
+  accent-color: #4a7dff;
+  cursor: pointer;
+}
+
+.speed-value {
+  min-width: 38px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+}

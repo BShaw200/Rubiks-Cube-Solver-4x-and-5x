@@ -12,6 +12,8 @@ export function UI() {
   const stop = useCubeStore((s) => s.stop);
   const resume = useCubeStore((s) => s.continue);
   const resetCube = useCubeStore((s) => s.resetCube);
+  const speed = useCubeStore((s) => s.speed);
+  const setSpeed = useCubeStore((s) => s.setSpeed);
 
   return (
     <div className="ui-overlay">
@@ -45,6 +47,19 @@ export function UI() {
       {status === 'STOPPED' && <button onClick={resume}>Continue</button>}
 
       <div className="move-display">{displayedMove || '\u00A0'}</div>
+
+      <label className="speed-control">
+        <span>Speed</span>
+        <input
+          type="range"
+          min="1"
+          max="16"
+          step="1"
+          value={speed}
+          onChange={(e) => setSpeed(Number(e.target.value))}
+        />
+        <span className="speed-value">{speed}x</span>
+      </label>
     </div>
   );
 }
