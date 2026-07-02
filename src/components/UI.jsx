@@ -5,6 +5,8 @@ export function UI() {
   const cubeSize = useCubeStore((s) => s.cubeSize);
   const isSolved = useCubeStore((s) => s.isSolved);
   const displayedMove = useCubeStore((s) => s.displayedMove);
+  const currentMoveIndex = useCubeStore((s) => s.currentMoveIndex);
+  const activeLength = useCubeStore((s) => s.activeLength);
 
   const setCubeSize = useCubeStore((s) => s.setCubeSize);
   const startScramble = useCubeStore((s) => s.startScramble);
@@ -48,13 +50,19 @@ export function UI() {
 
       <div className="move-display">{displayedMove || '\u00A0'}</div>
 
+      {(status === 'SCRAMBLING' || status === 'SOLVING' || status === 'STOPPED') && (
+        <div className="move-counter">
+          {Math.min(currentMoveIndex + 1, activeLength)} / {activeLength}
+        </div>
+      )}
+
       <label className="speed-control">
         <span>Speed</span>
         <input
           type="range"
-          min="1"
+          min="0.25"
           max="16"
-          step="1"
+          step="0.25"
           value={speed}
           onChange={(e) => setSpeed(Number(e.target.value))}
         />

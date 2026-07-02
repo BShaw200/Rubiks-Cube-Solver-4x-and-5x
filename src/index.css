@@ -68,6 +68,18 @@ canvas {
   border-radius: 8px;
 }
 
+.move-counter {
+  color: #f5f5f5;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid #3a3a42;
+  border-radius: 8px;
+  opacity: 0.9;
+}
+
 .speed-control {
   display: flex;
   align-items: center;
@@ -81,7 +93,7 @@ canvas {
 }
 
 .speed-control input[type='range'] {
-  width: 110px;
+  width: 180px;
   accent-color: #4a7dff;
   cursor: pointer;
 }
