@@ -1,6 +1,7 @@
 import Cube from './kociemba/index.js';
 import { modelToFaceletString } from './facelets.js';
 import { solve5 } from './solve5.js';
+import { solve4 } from './solve4.js';
 
 let initialized = false;
 
@@ -46,6 +47,9 @@ export function solveCube(model) {
   const size = model.size;
   if (size === 5) {
     return solve5(model);
+  }
+  if (size === 4) {
+    return solve4(model);
   }
   if (size !== 2 && size !== 3) return null;
   if (model.isSolved()) return [];
