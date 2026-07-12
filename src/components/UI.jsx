@@ -25,80 +25,84 @@ export function UI({ onStepForward, onStepBackward }) {
 
   return (
     <div className="ui-overlay">
-      <select
-        value={cubeSize}
-        disabled={status !== 'IDLE'}
-        onChange={(e) => setCubeSize(Number(e.target.value))}
-      >
-        <option value={2}>2×2×2</option>
-        <option value={3}>3×3×3</option>
-        <option value={4}>4×4×4</option>
-        <option value={5}>5×5×5</option>
-      </select>
+      <div className="ui-primary">
+        <select
+          value={cubeSize}
+          disabled={status !== 'IDLE'}
+          onChange={(e) => setCubeSize(Number(e.target.value))}
+        >
+          <option value={2}>2×2×2</option>
+          <option value={3}>3×3×3</option>
+          <option value={4}>4×4×4</option>
+          <option value={5}>5×5×5</option>
+        </select>
 
-      {status === 'IDLE' && (
-        <>
-          <button onClick={startScramble}>Scramble</button>
-          <button disabled={isSolved} onClick={startSolve}>
-            Solve
+        {status === 'IDLE' && (
+          <>
+            <button onClick={startScramble}>Scramble</button>
+            <button disabled={isSolved} onClick={startSolve}>
+              Solve
+            </button>
+            <button disabled={isSolved} onClick={resetCube}>
+              Reset
+            </button>
+          </>
+        )}
+
+        {(status === 'SCRAMBLING' || status === 'SOLVING') && (
+          <button onClick={stop} title="Spacebar">
+            Stop
           </button>
-          <button disabled={isSolved} onClick={resetCube}>
-            Reset
+        )}
+
+        {canStep && (
+          <>
+            <button
+              onClick={onStepBackward}
+              disabled={currentMoveIndex <= 0}
+              title="Left arrow"
+            >
+              ◀ Step
+            </button>
+            <button
+              onClick={onStepForward}
+              disabled={currentMoveIndex >= activeLength}
+              title="Right arrow"
+            >
+              Step ▶
+            </button>
+          </>
+        )}
+
+        {status === 'STOPPED' && (
+          <button onClick={resume} title="Spacebar">
+            Continue
           </button>
-        </>
-      )}
+        )}
+      </div>
 
-      {(status === 'SCRAMBLING' || status === 'SOLVING') && (
-        <button onClick={stop} title="Spacebar">
-          Stop
-        </button>
-      )}
+      <div className="ui-secondary">
+        <div className="move-display">{displayedMove || ' '}</div>
 
-      {canStep && (
-        <>
-          <button
-            onClick={onStepBackward}
-            disabled={currentMoveIndex <= 0}
-            title="Left arrow"
-          >
-            ◀ Step
-          </button>
-          <button
-            onClick={onStepForward}
-            disabled={currentMoveIndex >= activeLength}
-            title="Right arrow"
-          >
-            Step ▶
-          </button>
-        </>
-      )}
+        {(status === 'SCRAMBLING' || status === 'SOLVING' || canStep) && (
+          <div className="move-counter">
+            {currentMoveIndex} / {activeLength}
+          </div>
+        )}
 
-      {status === 'STOPPED' && (
-        <button onClick={resume} title="Spacebar">
-          Continue
-        </button>
-      )}
-
-      <div className="move-display">{displayedMove || '\u00A0'}</div>
-
-      {(status === 'SCRAMBLING' || status === 'SOLVING' || canStep) && (
-        <div className="move-counter">
-          {currentMoveIndex} / {activeLength}
-        </div>
-      )}
-
-      <label className="speed-control">
-        <span>Speed</span>
-        <input
-          type="range"
-          min="0.25"
-          max="16"
-          step="0.25"
-          value={speed}
-          onChange={(e) => setSpeed(Number(e.target.value))}
-        />
-        <span className="speed-value">{speed}x</span>
-      </label>
+        <label className="speed-control">
+          <span>Speed</span>
+          <input
+            type="range"
+            min="0.25"
+            max="16"
+            step="0.25"
+            value={speed}
+            onChange={(e) => setSpeed(Number(e.target.value))}
+          />
+          <span className="speed-value">{speed}x</span>
+        </label>
+      </div>
     </div>
   );
 }

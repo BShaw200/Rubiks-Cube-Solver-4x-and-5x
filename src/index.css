@@ -24,8 +24,43 @@ canvas {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   user-select: none;
+}
+
+.ui-primary,
+.ui-secondary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* On narrow screens (phones) keep the action buttons at the top and move the
+   readouts + speed slider to a bar pinned at the bottom of the screen. */
+@media (max-width: 600px) {
+  .ui-overlay {
+    top: 8px;
+    left: 8px;
+    right: 8px;
+  }
+
+  .ui-primary {
+    justify-content: center;
+  }
+
+  .ui-secondary {
+    position: fixed;
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    justify-content: center;
+  }
+
+  .speed-control input[type='range'] {
+    width: 40vw;
+  }
 }
 
 .ui-overlay button,
