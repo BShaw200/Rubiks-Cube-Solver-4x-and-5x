@@ -34,7 +34,7 @@ export const useCubeStore = create((set, get) => ({
   prevStatus: 'IDLE',
   displayedMove: '',
   isSolved: true,
-  speed: 5,
+  speed: 2,
   activeLength: 0,
 
   setCubeSize: (size) => {
@@ -66,6 +66,7 @@ export const useCubeStore = create((set, get) => ({
       prevStatus: 'IDLE',
       displayedMove: '',
       isSolved: true,
+      speed: 2,
     }));
   },
 
@@ -77,7 +78,6 @@ export const useCubeStore = create((set, get) => ({
       currentMoveIndex: 0,
       status: 'SCRAMBLING',
       isSolved: false,
-      speed: 5,
       activeLength: seq.length,
     });
   },
@@ -97,7 +97,7 @@ export const useCubeStore = create((set, get) => ({
       sol = test.isSolved() ? inverse : [];
     }
 
-    set({ solveSequence: sol, currentMoveIndex: 0, status: 'SOLVING', speed: 1, activeLength: sol.length });
+    set({ solveSequence: sol, currentMoveIndex: 0, status: 'SOLVING', activeLength: sol.length });
   },
 
   stop: () => set({ prevStatus: get().status, status: 'STOPPED' }),
