@@ -1,11 +1,11 @@
 export const COLORS = {
-  BLUE: '#0046ad',
-  GREEN: '#009b48',
+  BLUE: '#1064ff',
+  GREEN: '#00c94e',
   WHITE: '#ffffff',
-  YELLOW: '#ffd500',
-  RED: '#b71234',
-  ORANGE: '#ff5800',
-  BLACK: '#0a0a0a',
+  YELLOW: '#ffe000',
+  RED: '#ff2038',
+  ORANGE: '#ff7d1a',
+  BLACK: '#111111',
 };
 
 export function cubieColors(ix, iy, iz, size) {

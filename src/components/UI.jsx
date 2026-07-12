@@ -1,12 +1,13 @@
 import { useCubeStore } from '../store/useCubeStore.js';
 
-export function UI() {
+export function UI({ onStepForward, onStepBackward }) {
   const status = useCubeStore((s) => s.status);
   const cubeSize = useCubeStore((s) => s.cubeSize);
   const isSolved = useCubeStore((s) => s.isSolved);
   const displayedMove = useCubeStore((s) => s.displayedMove);
   const currentMoveIndex = useCubeStore((s) => s.currentMoveIndex);
   const activeLength = useCubeStore((s) => s.activeLength);
+  const scrambleSequence = useCubeStore((s) => s.scrambleSequence);
 
   const setCubeSize = useCubeStore((s) => s.setCubeSize);
   const startScramble = useCubeStore((s) => s.startScramble);
@@ -16,6 +17,11 @@ export function UI() {
   const resetCube = useCubeStore((s) => s.resetCube);
   const speed = useCubeStore((s) => s.speed);
   const setSpeed = useCubeStore((s) => s.setSpeed);
+
+  // Stepping is available while paused, or from IDLE once a scramble path
+  // exists to walk through.
+  const canStep =
+    status === 'STOPPED' || (status === 'IDLE' && scrambleSequence.length > 0);
 
   return (
     <div className="ui-overlay">
@@ -43,16 +49,41 @@ export function UI() {
       )}
 
       {(status === 'SCRAMBLING' || status === 'SOLVING') && (
-        <button onClick={stop}>Stop</button>
+        <button onClick={stop} title="Spacebar">
+          Stop
+        </button>
       )}
 
-      {status === 'STOPPED' && <button onClick={resume}>Continue</button>}
+      {canStep && (
+        <>
+          <button
+            onClick={onStepBackward}
+            disabled={currentMoveIndex <= 0}
+            title="Left arrow"
+          >
+            ◀ Step
+          </button>
+          <button
+            onClick={onStepForward}
+            disabled={currentMoveIndex >= activeLength}
+            title="Right arrow"
+          >
+            Step ▶
+          </button>
+        </>
+      )}
+
+      {status === 'STOPPED' && (
+        <button onClick={resume} title="Spacebar">
+          Continue
+        </button>
+      )}
 
       <div className="move-display">{displayedMove || '\u00A0'}</div>
 
-      {(status === 'SCRAMBLING' || status === 'SOLVING' || status === 'STOPPED') && (
+      {(status === 'SCRAMBLING' || status === 'SOLVING' || canStep) && (
         <div className="move-counter">
-          {Math.min(currentMoveIndex + 1, activeLength)} / {activeLength}
+          {currentMoveIndex} / {activeLength}
         </div>
       )}
 

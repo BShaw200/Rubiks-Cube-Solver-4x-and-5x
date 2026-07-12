@@ -106,6 +106,8 @@ export const useCubeStore = create((set, get) => ({
 
   nextMove: () => set({ currentMoveIndex: get().currentMoveIndex + 1 }),
 
+  prevMove: () => set({ currentMoveIndex: Math.max(0, get().currentMoveIndex - 1) }),
+
   commitMove: (move) => {
     const model = get().model;
     model.applyMove(move);
@@ -115,15 +117,36 @@ export const useCubeStore = create((set, get) => ({
   },
 
   finish: ({ clearSequence = false } = {}) =>
-    set((state) => ({
-      status: 'IDLE',
-      scrambleSequence: clearSequence ? [] : state.scrambleSequence,
-      solveSequence: [],
-      currentMoveIndex: 0,
-      displayedMove: '',
-      isSolved: state.model.isSolved(),
-      activeLength: 0,
-    })),
+    set((state) => {
+      // After a solve we discard the path (cube is solved, nothing to step).
+      if (clearSequence) {
+        return {
+          status: 'IDLE',
+          scrambleSequence: [],
+          solveSequence: [],
+          currentMoveIndex: 0,
+          displayedMove: '',
+          isSolved: state.model.isSolved(),
+          activeLength: 0,
+        };
+      }
+      // After a scramble we keep the path and park at its end, so the user can
+      // step backward (unwind) / forward (rewind) through it from IDLE.
+      const len = state.scrambleSequence.length;
+      return {
+        status: 'IDLE',
+        solveSequence: [],
+        currentMoveIndex: len,
+        displayedMove: '',
+        isSolved: state.model.isSolved(),
+        activeLength: len,
+      };
+    }),
+
+  // Invalidate the steppable path — used when a manual turn desyncs the cube
+  // from the pre-calculated scramble sequence.
+  clearPath: () =>
+    set({ scrambleSequence: [], currentMoveIndex: 0, displayedMove: '', activeLength: 0 }),
 
   setDisplayedMove: (str) => set({ displayedMove: str }),
 

@@ -45,9 +45,9 @@ export const Cube = forwardRef(function Cube({ controlsRef }, ref) {
 
   const doMove = useCallback(
     (move, onDone, duration = 0.333) => {
-      if (animating.current) return;
+      if (animating.current) return false;
       const root = rootRef.current;
-      if (!root) return;
+      if (!root) return false;
       animating.current = true;
 
       const target = move.layer - (cubeSize - 1) / 2;
@@ -75,6 +75,8 @@ export const Cube = forwardRef(function Cube({ controlsRef }, ref) {
           if (onDone) onDone();
         },
       });
+
+      return true;
     },
     [cubeSize]
   );
@@ -135,6 +137,9 @@ export const Cube = forwardRef(function Cube({ controlsRef }, ref) {
       }
 
       g.fired = true;
+      // A manual turn desyncs the cube from the scramble path — drop it so
+      // stale step controls disappear.
+      useCubeStore.getState().clearPath();
       doMove({ axis: dom.name, layer, direction: dom.sign });
     };
 
